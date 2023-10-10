@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokemon</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="navbar">
+      <img class="navbar__image" src="./pokeball.png" alt="pokebal" />
+      <img class="navbar__image" src="./user.png" alt="user" />
+    </div>
+    <h1 class="title">Pokedex</h1>
+    <p class="subtitle">
+      Search for a Pokemon by name or using its national Pokedex number
+    </p>
+    <form id="form">
+      <div class="action">
+        <div class="searchbar">
+          <button id="btn-search" class="searchbar__button" type="submit">
+            <img src="search-bar.png" alt="search bar" />
+          </button>
+          <input
+            class="searchbar__input"
+            type="text"
+            name="pokemonId"
+            placeholder="Name or number"
+          />
+        </div>
+        <button class="btn-refresh">
+          <img src="refresh.png" alt="refresh" />
+        </button>
+      </div>
+    </form>
+    <div id="list-pokemon" class="table-pokemon"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
