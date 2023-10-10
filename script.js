@@ -5,10 +5,10 @@ window.onload = async () => {
     try {
       const detailPoke = await (await fetch(poke.url)).json();
 
-      const htmlString = `<div class="card-pokemon">
+      const htmlString = `<div draggable="true" class="card-pokemon">
         <img
           class="card-pokemon__image"
-          src="${detailPoke.sprites.front_default}"
+          src="${detailPoke.sprites.front_default}" 
           alt="poke vatar"
         />
         <div class="card-pokemon__content">
@@ -16,9 +16,7 @@ window.onload = async () => {
             <p class="card-pokemon__id">n 00${detailPoke.id}</p>
             <p class="card-pokemon__name">${detailPoke.name}</p>
           </div>
-          <div class="card-pokemon__elements">
-            <p class="card-pokemon__element">Grass</p>
-            <p class="card-pokemon__element">Grass</p>
+          <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
           </div>
         </div>
       </div>`;
@@ -26,6 +24,16 @@ window.onload = async () => {
       const template = document.createElement("template");
       template.innerHTML = htmlString;
       document.getElementById("list-pokemon").appendChild(template.content);
+
+      for (let i = 0; i < detailPoke.types.length; i++) {
+        const elelementsTemplate = document.createElement("template");
+        const elelementHtmlString = `<p class="card-pokemon__element">${detailPoke.types[i].type.name}</p>`;
+
+        elelementsTemplate.innerHTML = elelementHtmlString;
+        document
+          .getElementById(`elelements${detailPoke.id}`)
+          .appendChild(elelementsTemplate.content);
+      }
     } catch (err) {
       console.log(
         "🚀 ~ file: script.js:30 ~ listPoke?.results.forEach ~ err:",
