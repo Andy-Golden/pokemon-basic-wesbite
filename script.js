@@ -38,8 +38,6 @@ formModal.addEventListener("submit", (e) => {
     }
   });
 
-  console.log(detailPokes[0].name);
-
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
 
   const modalClassList = document.getElementById("bg-modal").classList;
@@ -47,7 +45,6 @@ formModal.addEventListener("submit", (e) => {
 });
 
 window.onload = async () => {
-  console.log("load");
   const data = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=25");
   const listPoke = await data.json();
 
