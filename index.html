@@ -33,7 +33,42 @@
         </button>
       </div>
     </form>
+    <div id="filter-list" class="filter-list">
+      <input type="checkbox" name="bug" />
+      <span>bug</span>
+      <input type="checkbox" name="electric" />
+      <span>electric</span>
+      <input type="checkbox" name="flying" />
+      <span>flying</span>
+      <input type="checkbox" name="normal" />
+      <span>normal</span>
+      <input type="checkbox" name="grass" />
+      <span>grass</span>
+      <input type="checkbox" name="poison" />
+      <span>poison</span>
+      <input type="checkbox" name="water" />
+      <span>water</span>
+      <input type="checkbox" name="fire" />
+      <span>fire</span>
+      <button type="button" id="btn-filter">filter</button>
+    </div>
     <div id="list-pokemon" class="table-pokemon"></div>
+    <form id="form-modal">
+      <div id="bg-modal" class="bg-modal">
+        <div class="modal">
+          <p class="modal__header">Edit poke</p>
+          <input id="pokemon-name" class="modal__body" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
+          <div class="modal__footer">
+            <button id="btn-save" type="submit">
+              Save
+            </button>
+            <button id="btn-close" type="button">
+              Close
+            </button>
+          </div>
+        </div>
+    </form>
+    </divv>
     <script src="script.js"></script>
   </body>
 </html>

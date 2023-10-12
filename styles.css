@@ -3,6 +3,7 @@ body {
   margin: 0;
   width: 100vw;
   height: 100vh;
+  position: relative;
 }
 
 .navbar {
@@ -116,6 +117,7 @@ body {
   border-radius: 10px;
   font-family: sans-serif;
   padding: 10px;
+  margin-top: 20px;
 }
 
 .card-pokemon__image {
@@ -146,6 +148,7 @@ body {
 
 .card-pokemon__name {
   font-size: x-large;
+  text-wrap: wrap;
 }
 
 .card-pokemon__elements {
@@ -153,10 +156,103 @@ body {
 }
 
 .card-pokemon__element {
-  background-color: greenyellow;
   width: 80px;
   border-radius: 10px;
   height: 15px;
   text-align: center;
   padding: 6px;
+}
+
+.card-pokemon__button {
+  width: 100px;
+  height: 25px;
+  font-size: medium;
+  border-radius: 5px;
+}
+
+.filter-list {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-list input {
+  height: 20px;
+  max-width: 20px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.filter-list span {
+  margin-right: 5px;
+}
+
+.filter-list button {
+  margin-left: 20px;
+  max-width: 100px;
+  width: 100%;
+}
+
+.bg-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+.bg-modal--show {
+  visibility: visible;
+}
+
+.modal {
+  max-width: 500px;
+  width: 100%;
+  height: 250px;
+  background-color: white;
+  border-radius: 20px;
+  margin: auto;
+  margin-top: 100px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.modal__header {
+  text-align: center;
+  font-size: xx-large;
+}
+
+.modal__body {
+  outline: none;
+  border: none;
+  width: 95%;
+  height: 30px;
+  font-size: x-large;
+}
+
+.modal__footer {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.modal__footer button {
+  max-width: 100px;
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: large;
+  margin-right: 5px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.modal__footer button:hover {
+  background-color: grey;
 }
