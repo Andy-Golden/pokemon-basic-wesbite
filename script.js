@@ -9,6 +9,17 @@ const colorTypes = {
   electric: "rgb(193, 193, 107)",
 };
 
+const pokeTypes = {
+  grass: "grass",
+  poison: "poison",
+  bug: "bug",
+  normal: "normal",
+  flying: "flying",
+  water: "water",
+  fire: "fire",
+  electric: "electric",
+};
+
 const renderPokeCard = (detailPoke) => {
   const htmlString = `<div draggable="true" class="card-pokemon">
   <img
@@ -106,6 +117,18 @@ window.onload = async () => {
     renderPokemonTypes(detailPoke);
   });
 
+  const arrTypes = Object.entries(pokeTypes);
+
+  arrTypes.map((type) => {
+    const countType = detailPokes.filter((detailPoke) =>
+      detailPoke.types.some((item) => item, type.name === type)
+    );
+    console.log(
+      "🚀 ~ file: script.js:126 ~ arrTypes.forEach ~ countType:",
+      countType
+    );
+  });
+
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
 };
 
@@ -163,7 +186,7 @@ function handleFilter() {
     return;
   }
 
-  const appliedFilterNames = appliedFilters.map((item) => item.name); 
+  const appliedFilterNames = appliedFilters.map((item) => item.name);
   const filteredPoke = detailPokes.filter((poke) => {
     // return poke.types.some((item) =>
     //   appliedFilterNames.includes(item.type.name)
@@ -175,7 +198,6 @@ function handleFilter() {
 
     // use index and some cho mang ngoai
 
- 
     console.log("🚀 ~ file: script.js:173 ~ result ~ result:", result);
 
     return result.every(Boolean); // must return array has all truesy value;
