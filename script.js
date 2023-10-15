@@ -66,6 +66,29 @@ const countTypes = (filteredPoked, appliedFilterNames) => {
   });
 };
 
+const renderPokeTypesInModal = (types) => {
+  const options = document.getElementById("dropdown-options");
+
+  options.innerHTML = "";
+
+  types.forEach((item) => {
+    const elementTemplates = document.createElement("template");
+    elementTemplates.innerHTML = `
+    <div class="dropdown__choosed-option" style="background-color: ${
+      colorTypes[item.type.name]
+    };">
+      <span>${item.type.name}</span>
+      <button type="button" id="btn-remove-bug" style="border: none; outline: none; background-color: transparent;">
+        <i class="fas fa-times" style="font-size: small;"></i>
+      </button>
+    </div>
+    `;
+    options.appendChild(elementTemplates.content);
+
+    document.getElementById(`option-${item.type.name}`).selected = true;
+  });
+};
+
 //curry function
 const handleOpenModal = (id) => () => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
@@ -76,6 +99,12 @@ const handleOpenModal = (id) => () => {
   const input = modal.getElementsByTagName("input");
   input[0].value = `n00${id}`;
   input[1].value = poke.name;
+
+  const types = [...poke.types];
+
+  renderPokeTypesInModal(types);
+
+  document.getElementById("pokemon-image").src = poke.sprites.front_default;
 };
 
 const formModal = document.getElementById("form-modal");
@@ -130,7 +159,7 @@ window.onload = async () => {
   const filterList = document
     .getElementById("filter-list")
     .getElementsByTagName("input");
-    const filterListArr = Array.prototype.slice.call(filterList);
+  const filterListArr = Array.prototype.slice.call(filterList);
 
   filterListArr.forEach((checkedFilter) => {
     const filteredPoke = detailPokes.filter((poke) =>
@@ -231,3 +260,27 @@ const handleCloseModal = () => {
 };
 
 document.getElementById("btn-close").onclick = handleCloseModal;
+
+let isDropped = false;
+
+const handleShowDropDown = () => {
+  const multiselect = document.getElementById("multiselect");
+  const options = Array.prototype.slice.call(
+    multiselect.getElementsByTagName("option")
+  );
+
+  // options.forEach((option) => {
+  //   console.log("value: ", option.value);
+  //   console.log("selected: ", option.selected);
+  // })
+
+  if (!isDropped) {
+    isDropped = true;
+    multiselect.classList.add("dropdown--show");
+  } else {
+    isDropped = false;
+    multiselect.classList.remove("dropdown--show");
+  }
+};
+
+document.getElementById("btn-show-dropdown").onclick = handleShowDropDown;
