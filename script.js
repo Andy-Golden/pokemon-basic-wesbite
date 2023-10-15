@@ -71,6 +71,10 @@ const renderPokeTypesInModal = (types) => {
 
   options.innerHTML = "";
 
+  Object.values(pokeTypes).forEach((item) => {
+    document.getElementById(`option-${item}`).selected = false;
+  })
+
   types.forEach((item) => {
     const elementTemplates = document.createElement("template");
     elementTemplates.innerHTML = `
