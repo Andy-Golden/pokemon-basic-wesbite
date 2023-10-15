@@ -83,8 +83,13 @@
       <div id="bg-modal" class="bg-modal">
         <div class="modal">
           <p class="modal__header">Edit poke</p>
-          <input id="pokemon-id" hidden="true">
-          <input id="pokemon-name" class="modal__body" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
+          <div class="modal__body">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" id="pokemon-image" alt="pokemon image" />
+            <div id="pokemon-info">
+              <input id="pokemon-id" readonly="true" />
+              <input id="pokemon-name" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
+            </div>
+          </div>
           <div class="modal__footer">
             <button id="btn-save" type="submit">
               Save

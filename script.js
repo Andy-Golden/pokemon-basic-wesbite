@@ -57,6 +57,15 @@ const renderPokemonTypes = (detailPoke) => {
   }
 };
 
+const countTypes = (filteredPoked, appliedFilterNames) => {
+  appliedFilterNames.forEach((name) => {
+    const count = filteredPoked.filter((poke) =>
+      poke.types.some((item) => item.type.name === name)
+    ).length;
+    document.getElementById(name).innerHTML = `(${count})`;
+  });
+};
+
 //curry function
 const handleOpenModal = (id) => () => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
@@ -65,7 +74,7 @@ const handleOpenModal = (id) => () => {
   const modal = document.getElementById("bg-modal");
   modal.classList.add("bg-modal--show");
   const input = modal.getElementsByTagName("input");
-  input[0].value = id;
+  input[0].value = `n00${id}`;
   input[1].value = poke.name;
 };
 
@@ -77,13 +86,12 @@ formModal.addEventListener("submit", (e) => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
 
   const newPokeName = document.getElementById("pokemon-name").value;
-  const pokeId = document.getElementById("pokemon-id").value;
+  const pokeId = document.getElementById("pokemon-id").value.split("n00")[1];
 
   document.getElementById(`pokemon-name${pokeId}`).innerHTML = newPokeName;
 
   detailPokes.forEach((detailPoke) => {
     if (detailPoke.id.toString() === pokeId) {
-      console.log(detailPoke.id);
       detailPoke.name = newPokeName;
     }
   });
@@ -117,33 +125,21 @@ window.onload = async () => {
     renderPokemonTypes(detailPoke);
   });
 
-  const arrTypes = Object.entries(pokeTypes);
-
-  arrTypes.map((type) => {
-    const countType = detailPokes.filter((detailPoke) =>
-      detailPoke.types.some((item) => item, type.name === type)
-    );
-    console.log(
-      "🚀 ~ file: script.js:126 ~ arrTypes.forEach ~ countType:",
-      countType
-    );
-  });
-
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
-};
 
-const countTypes = (filteredPoked, appliedFilterNames, filterListArr) => {
-  const unCheckedFilters = filterListArr.filter((item) => !item.checked);
+  const filterList = document
+    .getElementById("filter-list")
+    .getElementsByTagName("input");
+    const filterListArr = Array.prototype.slice.call(filterList);
 
-  unCheckedFilters.forEach((unCheckedFilter) => {
-    document.getElementById(unCheckedFilter.name).innerHTML = ""; // reset previous filter
-  });
+  filterListArr.forEach((checkedFilter) => {
+    const filteredPoke = detailPokes.filter((poke) =>
+      poke.types.some((item) => item.type.name === checkedFilter.name)
+    );
 
-  appliedFilterNames.forEach((name) => {
-    const count = filteredPoked.filter((poke) =>
-      poke.types.some((item) => item.type.name === name)
-    ).length;
-    document.getElementById(name).innerHTML = `(${count})`;
+    document.getElementById(
+      checkedFilter.name
+    ).innerHTML = `(${filteredPoke.length})`; // reset previous filter
   });
 };
 
@@ -198,9 +194,11 @@ function handleFilter() {
 
     // use index and some cho mang ngoai
 
-    console.log("🚀 ~ file: script.js:173 ~ result ~ result:", result);
-
     return result.every(Boolean); // must return array has all truesy value;
+  });
+
+  filterListArr.forEach((checkedFilter) => {
+    document.getElementById(checkedFilter.name).innerHTML = "(0)"; // reset previous filter
   });
 
   if (!filteredPoke?.length) {
