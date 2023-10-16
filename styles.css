@@ -294,6 +294,7 @@ body {
   display: flex;
   flex: 1;
   gap: 10px;
+  overflow: hidden;
 }
 
 .dropdown__choosed-option {

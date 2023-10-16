@@ -73,7 +73,7 @@ const renderPokeTypesInModal = (types) => {
 
   Object.values(pokeTypes).forEach((item) => {
     document.getElementById(`option-${item}`).selected = false;
-  })
+  });
 
   types.forEach((item) => {
     const elementTemplates = document.createElement("template");
@@ -288,3 +288,30 @@ const handleShowDropDown = () => {
 };
 
 document.getElementById("btn-show-dropdown").onclick = handleShowDropDown;
+
+const handSelectedChange = (e) => {
+  console.log(
+    "🚀 ~ file: script.js:293 ~ handSelectedChange ~ e:",
+    Array.prototype.slice.call(e.target)
+  );
+  const options = Array.prototype.slice.call(e.target);
+
+  const selectedTypes = [];
+
+  options.forEach((item) => {
+    // console.log(item.id);
+    // console.log(`${item.id}`.split("option-"));
+    if (item.selected) {
+      const obj = {
+        type: {
+          name: `${item.id}`.split("option-")[1],
+        },
+      };
+      selectedTypes.push(obj);
+    }
+  });
+
+  renderPokeTypesInModal(selectedTypes);
+};
+
+document.getElementById("multiselect").onchange = handSelectedChange;
