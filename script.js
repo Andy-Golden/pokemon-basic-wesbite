@@ -9,16 +9,106 @@ const colorTypes = {
   electric: "rgb(193, 193, 107)",
 };
 
+const pokeTypes = {
+  grass: "grass",
+  poison: "poison",
+  bug: "bug",
+  normal: "normal",
+  flying: "flying",
+  water: "water",
+  fire: "fire",
+  electric: "electric",
+};
+
+const renderPokeCard = (detailPoke) => {
+  const htmlString = `<div draggable="true" class="card-pokemon">
+  <img
+    class="card-pokemon__image"
+    src="${detailPoke.sprites.front_default}" 
+    alt="poke vatar"
+  />
+  <button id="card-pokemon-btn${detailPoke.id}" class="card-pokemon__button">
+    Edit       
+  </button>
+  <div class="card-pokemon__content">
+    <div class="card-pokemon__info">
+      <p class="card-pokemon__id">n 00${detailPoke.id}</p>
+      <p id="pokemon-name${detailPoke.id}" class="card-pokemon__name">${detailPoke.name}</p>
+    </div>
+    <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
+    </div>
+  </div>
+  </div>`;
+
+  return htmlString;
+};
+
+const renderPokemonTypes = (detailPoke) => {
+  for (let i = 0; i < detailPoke.types.length; i++) {
+    const elelementsTemplate = document.createElement("template");
+    const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
+      colorTypes[detailPoke.types[i].type.name]
+    };">${detailPoke.types[i].type.name}</p>`;
+
+    elelementsTemplate.innerHTML = elelementHtmlString;
+    document
+      .getElementById(`elelements${detailPoke.id}`)
+      .appendChild(elelementsTemplate.content);
+  }
+};
+
+const countTypes = (filteredPoked, appliedFilterNames) => {
+  appliedFilterNames.forEach((name) => {
+    const count = filteredPoked.filter((poke) =>
+      poke.types.some((item) => item.type.name === name)
+    ).length;
+    document.getElementById(name).innerHTML = `(${count})`;
+  });
+};
+
+const renderPokeTypesInModal = (types) => {
+  const options = document.getElementById("dropdown-options");
+
+  options.innerHTML = "";
+
+  Object.values(pokeTypes).forEach((item) => {
+    document.getElementById(`option-${item}`).selected = false;
+  })
+
+  types.forEach((item) => {
+    const elementTemplates = document.createElement("template");
+    elementTemplates.innerHTML = `
+    <div class="dropdown__choosed-option" style="background-color: ${
+      colorTypes[item.type.name]
+    };">
+      <span>${item.type.name}</span>
+      <button type="button" id="btn-remove-bug" style="border: none; outline: none; background-color: transparent;">
+        <i class="fas fa-times" style="font-size: small;"></i>
+      </button>
+    </div>
+    `;
+    options.appendChild(elementTemplates.content);
+
+    document.getElementById(`option-${item.type.name}`).selected = true;
+  });
+};
+
 //curry function
 const handleOpenModal = (id) => () => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
-  const poke = detailPokes.find((detailPoke) => detailPoke.id == id);
+  const poke = detailPokes.find((detailPoke) => detailPoke.id === id);
 
   const modal = document.getElementById("bg-modal");
   modal.classList.add("bg-modal--show");
-  const input = modal.getElementsByTagName("input")[0];
-  input.value = poke.name;
-  localStorage.setItem("pokeId", id);
+  const input = modal.getElementsByTagName("input");
+  input[0].value = `n00${id}`;
+  input[1].value = poke.name;
+
+  const types = [...poke.types];
+
+  renderPokeTypesInModal(types);
+
+  document.getElementById("pokemon-image").src = poke.sprites.front_default;
 };
 
 const formModal = document.getElementById("form-modal");
@@ -26,14 +116,15 @@ const formModal = document.getElementById("form-modal");
 formModal.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const pokeId = localStorage.getItem("pokeId");
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
 
   const newPokeName = document.getElementById("pokemon-name").value;
+  const pokeId = document.getElementById("pokemon-id").value.split("n00")[1];
+
   document.getElementById(`pokemon-name${pokeId}`).innerHTML = newPokeName;
 
   detailPokes.forEach((detailPoke) => {
-    if (detailPoke.id == pokeId) {
+    if (detailPoke.id.toString() === pokeId) {
       detailPoke.name = newPokeName;
     }
   });
@@ -50,51 +141,39 @@ window.onload = async () => {
 
   let requests = listPoke?.results.map((res) => fetch(res.url));
 
-  Promise.all(requests)
-    .then((response) => Promise.all(response.map((r) => r.json())))
-    .then((detailPokes) => {
-      localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
-      detailPokes.forEach((detailPoke) => {
-        const htmlString = `<div draggable="true" class="card-pokemon">
-      <img
-        class="card-pokemon__image"
-        src="${detailPoke.sprites.front_default}" 
-        alt="poke vatar"
-      />
-      <button id="card-pokemon-btn${detailPoke.id}" class="card-pokemon__button">
-        Edit       
-      </button>
-      <div class="card-pokemon__content">
-        <div class="card-pokemon__info">
-          <p class="card-pokemon__id">n 00${detailPoke.id}</p>
-          <p id="pokemon-name${detailPoke.id}" class="card-pokemon__name">${detailPoke.name}</p>
-        </div>
-        <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
-        </div>
-      </div>
-      </div>`;
+  const response = await Promise.all(requests);
 
-        const template = document.createElement("template");
-        template.innerHTML = htmlString;
-        document.getElementById("list-pokemon").appendChild(template.content);
+  const detailPokes = await Promise.all(response.map((r) => r.json()));
 
-        document.getElementById(`card-pokemon-btn${detailPoke.id}`).onclick =
-          handleOpenModal(detailPoke.id);
+  detailPokes.forEach((detailPoke) => {
+    const htmlString = renderPokeCard(detailPoke);
 
-        for (let i = 0; i < detailPoke.types.length; i++) {
-          const elelementsTemplate = document.createElement("template");
-          const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
-            colorTypes[detailPoke.types[i].type.name]
-          };">${detailPoke.types[i].type.name}</p>`;
+    const template = document.createElement("template");
+    template.innerHTML = htmlString;
+    document.getElementById("list-pokemon").appendChild(template.content);
 
-          elelementsTemplate.innerHTML = elelementHtmlString;
-          document
-            .getElementById(`elelements${detailPoke.id}`)
-            .appendChild(elelementsTemplate.content);
-        }
-      });
-    })
-    .catch((err) => console.log("err: ", err));
+    document.getElementById(`card-pokemon-btn${detailPoke.id}`).onclick =
+      handleOpenModal(detailPoke.id);
+
+    renderPokemonTypes(detailPoke);
+  });
+
+  localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
+
+  const filterList = document
+    .getElementById("filter-list")
+    .getElementsByTagName("input");
+  const filterListArr = Array.prototype.slice.call(filterList);
+
+  filterListArr.forEach((checkedFilter) => {
+    const filteredPoke = detailPokes.filter((poke) =>
+      poke.types.some((item) => item.type.name === checkedFilter.name)
+    );
+
+    document.getElementById(
+      checkedFilter.name
+    ).innerHTML = `(${filteredPoke.length})`; // reset previous filter
+  });
 };
 
 async function handleSearch(e) {
@@ -107,29 +186,14 @@ async function handleSearch(e) {
       await fetch(`https://pokeapi.co/api/v2/pokemon/${idPoke}`)
     ).json();
 
-    const htmlString = `<div draggable="true" class="card-pokemon">
-    <img
-      class="card-pokemon__image"
-      src="${detailPoke.sprites.front_default}" 
-      alt="poke vatar"
-    />
-    <button id="card-pokemon-btn${detailPoke.id}" class="card-pokemon__button">
-      Edit       
-    </button>
-    <div class="card-pokemon__content">
-      <div class="card-pokemon__info">
-        <p class="card-pokemon__id">n 00${detailPoke.id}</p>
-        <p id="pokemon-name${detailPoke.id}" class="card-pokemon__name">${detailPoke.name}</p>
-      </div>
-      <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
-      </div>
-    </div>
-    </div>`;
+    const htmlString = renderPokeCard(detailPoke);
 
     document.getElementById("list-pokemon").innerHTML = htmlString;
 
     document.getElementById(`card-pokemon-btn${detailPoke.id}`).onclick =
       handleOpenModal(detailPoke.id);
+
+    renderPokemonTypes(detailPoke);
   } catch (err) {
     console.log("🚀 ~ file: script.js:45 ~ btnSearchClicked ~ err:", err);
   }
@@ -138,23 +202,36 @@ async function handleSearch(e) {
 document.getElementById("btn-search").onclick = handleSearch;
 
 function handleFilter() {
+  // create array to put checkbox
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
   const filterList = document
     .getElementById("filter-list")
     .getElementsByTagName("input");
-  const filterListArr = Array.prototype.slice.call(filterList); // conver htmlCollection to arr
+  const filterListArr = Array.prototype.slice.call(filterList); // convert htmlCollection to arr
 
   const appliedFilters = filterListArr.filter((item) => item.checked);
+
   if (!appliedFilters?.length) {
     return;
   }
 
   const appliedFilterNames = appliedFilters.map((item) => item.name);
-
   const filteredPoke = detailPokes.filter((poke) => {
-    return poke.types.some((item) =>
-      appliedFilterNames.includes(item.type.name)
-    );
+    // return poke.types.some((item) =>
+    //   appliedFilterNames.includes(item.type.name)
+    // );
+
+    const result = appliedFilterNames.map((name) => {
+      return poke.types.some((item) => item.type.name === name);
+    });
+
+    // use index and some cho mang ngoai
+
+    return result.every(Boolean); // must return array has all truesy value;
+  });
+
+  filterListArr.forEach((checkedFilter) => {
+    document.getElementById(checkedFilter.name).innerHTML = "(0)"; // reset previous filter
   });
 
   if (!filteredPoke?.length) {
@@ -163,24 +240,7 @@ function handleFilter() {
     document.getElementById("list-pokemon").innerHTML = "";
 
     filteredPoke.forEach((detailPoke) => {
-      const htmlString = `<div draggable="true" class="card-pokemon">
-      <img
-        class="card-pokemon__image"
-        src="${detailPoke.sprites.front_default}" 
-        alt="poke vatar"
-      />
-      <button id="card-pokemon-btn${detailPoke.id}" class="card-pokemon__button">
-        Edit       
-      </button>
-      <div class="card-pokemon__content">
-        <div class="card-pokemon__info">
-          <p class="card-pokemon__id">n 00${detailPoke.id}</p>
-          <p id="pokemon-name${detailPoke.id}" class="card-pokemon__name">${detailPoke.name}</p>
-        </div>
-        <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
-        </div>
-      </div>
-      </div>`;
+      const htmlString = renderPokeCard(detailPoke);
 
       const template = document.createElement("template");
       template.innerHTML = htmlString;
@@ -189,18 +249,10 @@ function handleFilter() {
       document.getElementById(`card-pokemon-btn${detailPoke.id}`).onclick =
         handleOpenModal(detailPoke.id);
 
-      for (let i = 0; i < detailPoke.types.length; i++) {
-        const elelementsTemplate = document.createElement("template");
-        const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
-          colorTypes[detailPoke.types[i].type.name]
-        };">${detailPoke.types[i].type.name}</p>`;
-
-        elelementsTemplate.innerHTML = elelementHtmlString;
-        document
-          .getElementById(`elelements${detailPoke.id}`)
-          .appendChild(elelementsTemplate.content);
-      }
+      renderPokemonTypes(detailPoke);
     });
+
+    countTypes(filteredPoke, appliedFilterNames, filterListArr);
   }
 }
 
@@ -212,3 +264,27 @@ const handleCloseModal = () => {
 };
 
 document.getElementById("btn-close").onclick = handleCloseModal;
+
+let isDropped = false;
+
+const handleShowDropDown = () => {
+  const multiselect = document.getElementById("multiselect");
+  const options = Array.prototype.slice.call(
+    multiselect.getElementsByTagName("option")
+  );
+
+  // options.forEach((option) => {
+  //   console.log("value: ", option.value);
+  //   console.log("selected: ", option.selected);
+  // })
+
+  if (!isDropped) {
+    isDropped = true;
+    multiselect.classList.add("dropdown--show");
+  } else {
+    isDropped = false;
+    multiselect.classList.remove("dropdown--show");
+  }
+};
+
+document.getElementById("btn-show-dropdown").onclick = handleShowDropDown;

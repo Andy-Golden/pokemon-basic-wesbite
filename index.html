@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokemon</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -33,31 +37,79 @@
         </button>
       </div>
     </form>
-    <div id="filter-list" class="filter-list">
-      <input type="checkbox" name="bug" />
-      <span>bug</span>
-      <input type="checkbox" name="electric" />
-      <span>electric</span>
-      <input type="checkbox" name="flying" />
-      <span>flying</span>
-      <input type="checkbox" name="normal" />
-      <span>normal</span>
-      <input type="checkbox" name="grass" />
-      <span>grass</span>
-      <input type="checkbox" name="poison" />
-      <span>poison</span>
-      <input type="checkbox" name="water" />
-      <span>water</span>
-      <input type="checkbox" name="fire" />
-      <span>fire</span>
-      <button type="button" id="btn-filter">filter</button>
+    <div class="wrapper">
+      <div id="filter-list" class="filter-list">
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="bug" /> 
+          <span>bug</span>
+          <span id="bug" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="electric" />
+          <span>electric</span>
+          <span id="electric" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="flying" />
+          <span>flying</span>
+          <span id="flying" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="normal" />
+          <span>normal</span>
+          <span id="normal" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="grass" />
+          <span>grass</span>
+          <span id="grass" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="poison" />
+          <span>poison</span>
+          <span id="poison" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="water" />
+          <span>water</span>
+          <span id="water" style="color: red;"></span>
+        </div>
+        <div class="filter-option">
+          <input class="filter-option__input" type="checkbox" name="fire" />
+          <span>fire</span>
+          <span id="fire" style="color: red;"></span>
+        </div>
+        <button type="button" id="btn-filter">filter</button>
+      </div>
+      <div id="list-pokemon" class="table-pokemon"></div>
     </div>
-    <div id="list-pokemon" class="table-pokemon"></div>
     <form id="form-modal">
       <div id="bg-modal" class="bg-modal">
         <div class="modal">
           <p class="modal__header">Edit poke</p>
-          <input id="pokemon-name" class="modal__body" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
+          <div class="modal__body">
+            <img id="pokemon-image" alt="pokemon image" />
+            <div id="pokemon-info">
+              <input id="pokemon-id" readonly="true" />
+              <input id="pokemon-name" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
+              <div id="dropdown" class="dropdown">
+                <div id="dropdown-options" class="dropdown__choosed-options">
+                  
+                </div>
+                <button type="button" id="btn-show-dropdown"><i class="fas fa-caret-down" style="font-size: large; "></i></button>
+                <select id="multiselect" multiple="multiple" class="multiselect">
+                  <option id="option-bug" value="1">bug</option>
+                  <option id="option-electric" value="2">electric</option>
+                  <option id="option-flying" value="3">flying</option>
+                  <option id="option-normal" value="4">normal</option>    
+                  <option id="option-grass" value="5">grass</option>
+                  <option id="option-poison" value="6">poison</option>
+                  <option id="option-water" value="7">water</option>
+                  <option id="option-fire" value="8">fire</option>     
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="modal__footer">
             <button id="btn-save" type="submit">
               Save
