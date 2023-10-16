@@ -44,6 +44,7 @@ const renderPokeCard = (detailPoke) => {
 };
 
 const renderPokemonTypes = (detailPoke) => {
+  document.getElementById(`elelements${detailPoke.id}`).innerHTML = "";
   for (let i = 0; i < detailPoke.types.length; i++) {
     const elelementsTemplate = document.createElement("template");
     const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
@@ -123,11 +124,28 @@ formModal.addEventListener("submit", (e) => {
 
   document.getElementById(`pokemon-name${pokeId}`).innerHTML = newPokeName;
 
+  const options = Array.prototype.slice.call(
+    document.getElementById("multiselect")
+  );
+
+  const selectedOptions = options.filter((item) => item.selected);
+
   detailPokes.forEach((detailPoke) => {
     if (detailPoke.id.toString() === pokeId) {
       detailPoke.name = newPokeName;
+      const newTypes = selectedOptions.map((selectedOption, index) => {
+        const obj = {
+          slot: index + 1,
+          type: { name: `${selectedOption.id}`.split("option-")[1], url: "" },
+        };
+
+        return obj;
+      });
+      detailPoke.types = newTypes;
     }
   });
+
+  renderPokemonTypes(detailPokes[+pokeId - 1]);
 
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
 
@@ -269,14 +287,6 @@ let isDropped = false;
 
 const handleShowDropDown = () => {
   const multiselect = document.getElementById("multiselect");
-  const options = Array.prototype.slice.call(
-    multiselect.getElementsByTagName("option")
-  );
-
-  // options.forEach((option) => {
-  //   console.log("value: ", option.value);
-  //   console.log("selected: ", option.selected);
-  // })
 
   if (!isDropped) {
     isDropped = true;
@@ -290,10 +300,6 @@ const handleShowDropDown = () => {
 document.getElementById("btn-show-dropdown").onclick = handleShowDropDown;
 
 const handSelectedChange = (e) => {
-  console.log(
-    "🚀 ~ file: script.js:293 ~ handSelectedChange ~ e:",
-    Array.prototype.slice.call(e.target)
-  );
   const options = Array.prototype.slice.call(e.target);
 
   const selectedTypes = [];
