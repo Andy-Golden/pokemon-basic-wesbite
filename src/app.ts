@@ -1,4 +1,4 @@
-const colorTypes = {
+const COLOR_TYPES: ColorTypes = {
   GRASS: "rgb(99, 194, 99)",
   POISON: "rgb(150, 29, 150)",
   BUG: "rgb(31, 147, 31)",
@@ -9,7 +9,7 @@ const colorTypes = {
   ELECTRIC: "rgb(193, 193, 107)",
 };
 
-const pokeTypes = {
+const POKE_TYPES: PokeTypes = {
   GRASS: "grass",
   POISON: "poison",
   BUG: "bug",
@@ -22,47 +22,22 @@ const pokeTypes = {
 
 let IS_DROPPED = false;
 
-interface Sprites {
-  front_default: string;
-}
-
-interface Type {
-  name: string;
-  url: string;
-}
-
-interface Types {
-  slot: number;
-  type: Type;
-}
-
-interface DetailPoke {
-  id: number;
-  name: string;
-  sprites: Sprites;
-  types: Array<Types>;
-}
-
-interface FormElements extends HTMLFormElement {
-  pokemonId: HTMLInputElement;
-}
-
-const renderPokeCard = (detailPoke: DetailPoke) => {
+const renderPokeCard = (pokeDetail: PokeDetail) => {
   const htmlString = `<div draggable="true" class="card-pokemon">
     <img
       class="card-pokemon__image"
-      src="${detailPoke.sprites.front_default}" 
+      src="${pokeDetail.sprites.front_default}" 
       alt="poke vatar"
     />
-    <button id="card-pokemon-btn${detailPoke.id}" class="card-pokemon__button">
+    <button id="card-pokemon-btn${pokeDetail.id}" class="card-pokemon__button">
       Edit       
     </button>
     <div class="card-pokemon__content">
       <div class="card-pokemon__info">
-        <p class="card-pokemon__id">n 00${detailPoke.id}</p>
-        <p id="pokemon-name${detailPoke.id}" class="card-pokemon__name">${detailPoke.name}</p>
+        <p class="card-pokemon__id">n 00${pokeDetail.id}</p>
+        <p id="pokemon-name${pokeDetail.id}" class="card-pokemon__name">${pokeDetail.name}</p>
       </div>
-      <div id="elelements${detailPoke.id}" class="card-pokemon__elements">
+      <div id="elelements${pokeDetail.id}" class="card-pokemon__elements">
       </div>
     </div>
     </div>`;
@@ -70,41 +45,24 @@ const renderPokeCard = (detailPoke: DetailPoke) => {
   return htmlString;
 };
 
-const renderPokemonTypes = (detailPoke: DetailPoke) => {
-  const pokeEmlements = document.getElementById(`elelements${detailPoke.id}`);
+const renderPokemonTypes = (pokeDetail: PokeDetail) => {
+  const pokeEmlements = document.getElementById(`elelements${pokeDetail.id}`);
   if (!pokeEmlements) return;
 
   pokeEmlements.innerHTML = "";
 
-  for (let i = 0; i < detailPoke.types.length; i++) {
+  for (let i = 0; i < pokeDetail.types.length; i++) {
     const elelementsTemplate = document.createElement("template");
-    const type = detailPoke.types[i].type.name.toUpperCase();
+    const type = pokeDetail.types[i].type.name.toUpperCase();
 
     const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
-      colorTypes[type as keyof typeof colorTypes]
-    };">${detailPoke.types[i].type.name}</p>`;
+      COLOR_TYPES[type as keyof typeof COLOR_TYPES]
+    };">${pokeDetail.types[i].type.name}</p>`;
 
     elelementsTemplate.innerHTML = elelementHtmlString;
 
     pokeEmlements.appendChild(elelementsTemplate.content);
   }
-};
-
-const countTypes = (
-  filteredPoked: Array<DetailPoke>,
-  appliedFilterNames: Array<string>
-) => {
-  appliedFilterNames.forEach((name) => {
-    const count = filteredPoked.filter((poke) =>
-      poke.types.some((item) => item.type.name === name)
-    ).length;
-
-    const numberOfPokes = document.getElementById(name);
-
-    if (numberOfPokes) {
-      numberOfPokes.innerHTML = `(${count})`;
-    }
-  });
 };
 
 const handleMoveOption = (typeName: string) => () => {
@@ -128,9 +86,9 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
 
   options.innerHTML = "";
 
-  Object.values(pokeTypes).forEach((item: string) => {
+  Object.keys(POKE_TYPES).forEach((item) => {
     const option = document?.getElementById(
-      `option-${item}`
+      `option-${POKE_TYPES[item as keyof typeof POKE_TYPES]}`
     ) as HTMLOptionElement;
     if (option) {
       option.selected = false;
@@ -145,7 +103,7 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
       <div id="dropdown-option-${
         item.type.name
       }" class="dropdown__choosed-option" style="background-color: ${
-      colorTypes[type as keyof typeof colorTypes]
+      COLOR_TYPES[type as keyof typeof COLOR_TYPES]
     };">
         <span>${item.type.name}</span>
         <button type="button" id="btn-remove-${
@@ -174,12 +132,11 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
   });
 };
 
-//curry function
 const handleOpenModal = (id: number) => () => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes") ?? "{}");
 
   const poke = detailPokes.find(
-    (detailPoke: DetailPoke) => detailPoke.id === id
+    (pokeDetail: PokeDetail) => pokeDetail.id === id
   );
 
   const modal = document.getElementById("bg-modal");
@@ -238,9 +195,9 @@ formModal?.addEventListener("submit", (e) => {
 
   const selectedOptions = multiSelect.filter((item) => item.selected);
 
-  detailPokes.forEach((detailPoke: DetailPoke) => {
-    if (detailPoke.id.toString() === pokeId) {
-      detailPoke.name = newPokeName;
+  detailPokes.forEach((pokeDetail: PokeDetail) => {
+    if (pokeDetail.id.toString() === pokeId) {
+      pokeDetail.name = newPokeName;
 
       const newTypes = selectedOptions.map((selectedOption, index) => {
         const obj = {
@@ -250,7 +207,7 @@ formModal?.addEventListener("submit", (e) => {
 
         return obj;
       });
-      detailPoke.types = newTypes;
+      pokeDetail.types = newTypes;
     }
   });
 
@@ -271,12 +228,11 @@ window.onload = async () => {
 
   const detailPokes = await Promise.all(response.map((r) => r.json()));
 
-  detailPokes.forEach((detailPoke: DetailPoke) => {
-    const htmlString = renderPokeCard(detailPoke);
+  detailPokes.forEach((pokeDetail: PokeDetail) => {
+    const htmlString = renderPokeCard(pokeDetail);
 
     const template = document.createElement("template");
     template.innerHTML = htmlString;
-    // document.getElementById("list-pokemon").appendChild(template.content);
 
     const listPokemon = document.getElementById("list-pokemon");
 
@@ -285,14 +241,14 @@ window.onload = async () => {
     }
 
     const btnEditPoke = document.getElementById(
-      `card-pokemon-btn${detailPoke.id}`
+      `card-pokemon-btn${pokeDetail.id}`
     );
 
     if (btnEditPoke) {
-      btnEditPoke.onclick = handleOpenModal(detailPoke.id);
+      btnEditPoke.onclick = handleOpenModal(pokeDetail.id);
     }
 
-    renderPokemonTypes(detailPoke);
+    renderPokemonTypes(pokeDetail);
   });
 
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
@@ -306,7 +262,7 @@ window.onload = async () => {
   const filterListArr = Array.prototype.slice.call(filterList);
 
   filterListArr.forEach((checkedFilter) => {
-    const filteredPoke = detailPokes.filter((poke: DetailPoke) =>
+    const filteredPoke = detailPokes.filter((poke: PokeDetail) =>
       poke.types.some((item) => item.type.name === checkedFilter.name)
     );
 
@@ -318,7 +274,7 @@ window.onload = async () => {
   });
 };
 
-async function handleSearch(e: Event) {
+const handleSearch = async (e: Event) => {
   e.preventDefault();
 
   const form = document.getElementById("form") as FormElements;
@@ -326,11 +282,11 @@ async function handleSearch(e: Event) {
   const idPoke = form.pokemonId.value;
 
   try {
-    const detailPoke = await (
+    const pokeDetail = await (
       await fetch(`https://pokeapi.co/api/v2/pokemon/${idPoke}`)
     ).json();
 
-    const htmlString = renderPokeCard(detailPoke);
+    const htmlString = renderPokeCard(pokeDetail);
 
     const listPokemon = document.getElementById("list-pokemon");
 
@@ -339,24 +295,24 @@ async function handleSearch(e: Event) {
     }
 
     const btnEditPoke = document.getElementById(
-      `card-pokemon-btn${detailPoke.id}`
+      `card-pokemon-btn${pokeDetail.id}`
     );
 
     if (btnEditPoke) {
-      btnEditPoke.onclick = handleOpenModal(detailPoke.id);
+      btnEditPoke.onclick = handleOpenModal(pokeDetail.id);
     }
 
-    renderPokemonTypes(detailPoke);
+    renderPokemonTypes(pokeDetail);
   } catch (err) {
     console.log("🚀 ~ file: script.js:45 ~ btnSearchClicked ~ err:", err);
   }
-}
+};
 
 const btnSearch = document.getElementById("btn-search");
 
 if (btnSearch) btnSearch.onclick = handleSearch;
 
-function handleFilter() {
+const handleFilter = () => {
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes") ?? "{}");
   const listPokemon = document.getElementById("list-pokemon");
   if (!listPokemon) return;
@@ -373,7 +329,7 @@ function handleFilter() {
   }
 
   const appliedFilterNames = appliedFilters.map((item) => item.name);
-  const filteredPoke = detailPokes.filter((poke: DetailPoke) => {
+  const filteredPoke = detailPokes.filter((poke: PokeDetail) => {
     const result = appliedFilterNames.map((name) => {
       return poke.types.some((item) => item.type.name === name);
     });
@@ -381,40 +337,30 @@ function handleFilter() {
     return result.every(Boolean);
   });
 
-  // filterListArr.forEach((checkedFilter) => {
-  //   const numberOfPokes = document.getElementById(checkedFilter.name);
-
-  //   if (numberOfPokes) {
-  //     numberOfPokes.innerHTML = "(0)";
-  //   }
-  // });
-
   if (!filteredPoke?.length) {
     listPokemon.innerHTML = `<h1 class="not-found-message">Not found</h1`;
   } else {
     listPokemon.innerHTML = "";
 
-    filteredPoke.forEach((detailPoke: DetailPoke) => {
-      const htmlString = renderPokeCard(detailPoke);
+    filteredPoke.forEach((pokeDetail: PokeDetail) => {
+      const htmlString = renderPokeCard(pokeDetail);
 
       const template = document.createElement("template");
       template.innerHTML = htmlString;
       listPokemon.appendChild(template.content);
 
       const btnEditPoke = document.getElementById(
-        `card-pokemon-btn${detailPoke.id}`
+        `card-pokemon-btn${pokeDetail.id}`
       );
 
       if (btnEditPoke) {
-        btnEditPoke.onclick = handleOpenModal(detailPoke.id);
+        btnEditPoke.onclick = handleOpenModal(pokeDetail.id);
       }
 
-      renderPokemonTypes(detailPoke);
+      renderPokemonTypes(pokeDetail);
     });
-
-    // countTypes(filteredPoke, appliedFilterNames);
   }
-}
+};
 
 const btnFilter = document.getElementById("btn-filter");
 if (btnFilter) btnFilter.onclick = handleFilter;
