@@ -96,6 +96,7 @@ const renderPokeTypesInModal = (types) => {
 
 //curry function
 const handleOpenModal = (id) => () => {
+  console.log(form);
   const detailPokes = JSON.parse(localStorage.getItem("detailPokes"));
   const poke = detailPokes.find((detailPoke) => detailPoke.id === id);
 
@@ -270,7 +271,7 @@ function handleFilter() {
       renderPokemonTypes(detailPoke);
     });
 
-    countTypes(filteredPoke, appliedFilterNames, filterListArr);
+    countTypes(filteredPoke, appliedFilterNames);
   }
 }
 
