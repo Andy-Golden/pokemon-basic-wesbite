@@ -390,7 +390,7 @@ function handleFilter() {
   // });
 
   if (!filteredPoke?.length) {
-    listPokemon.innerHTML = `<p class"not-found-message">Not found</p`;
+    listPokemon.innerHTML = `<h1 class"not-found-message">Not found</h1`;
   } else {
     listPokemon.innerHTML = "";
 

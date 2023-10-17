@@ -245,7 +245,7 @@ function handleFilter() {
     //   }
     // });
     if (!(filteredPoke === null || filteredPoke === void 0 ? void 0 : filteredPoke.length)) {
-        listPokemon.innerHTML = `<p class"not-found-message">Not found</p`;
+        listPokemon.innerHTML = `<h1 class"not-found-message">Not found</h1`;
     }
     else {
         listPokemon.innerHTML = "";
