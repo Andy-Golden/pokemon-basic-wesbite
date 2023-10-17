@@ -63,6 +63,15 @@ const countTypes = (filteredPoked, appliedFilterNames) => {
         }
     });
 };
+const handleMoveOption = (typeName) => () => {
+    var _a;
+    const dropdownSelectedOption = document.getElementById(`dropdown-option-${typeName}`);
+    const option = document.getElementById(`option-${typeName}`);
+    if (!dropdownSelectedOption || !option)
+        return;
+    (_a = dropdownSelectedOption.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(dropdownSelectedOption);
+    option.selected = false;
+};
 const renderPokeTypesInModal = (types) => {
     const options = document.getElementById("dropdown-options");
     if (!options)
@@ -78,14 +87,18 @@ const renderPokeTypesInModal = (types) => {
         const elementTemplates = document.createElement("template");
         const type = item.type.name.toUpperCase();
         elementTemplates.innerHTML = `
-      <div class="dropdown__choosed-option" style="background-color: ${colorTypes[type]};">
+      <div id="dropdown-option-${item.type.name}" class="dropdown__choosed-option" style="background-color: ${colorTypes[type]};">
         <span>${item.type.name}</span>
-        <button type="button" id="btn-remove-bug" style="border: none; outline: none; background-color: transparent;">
+        <button type="button" id="btn-remove-${item.type.name}" style="border: none; outline: none; background-color: transparent;">
           <i class="fas fa-times" style="font-size: small;"></i>
         </button>
       </div>
       `;
         options.appendChild(elementTemplates.content);
+        const btnRemoveType = document.getElementById(`btn-remove-${item.type.name}`);
+        if (btnRemoveType) {
+            btnRemoveType.onclick = handleMoveOption(item.type.name);
+        }
         const option = document === null || document === void 0 ? void 0 : document.getElementById(`option-${item.type.name}`);
         if (option) {
             option.selected = true;
@@ -117,8 +130,7 @@ formModal === null || formModal === void 0 ? void 0 : formModal.addEventListener
     e.preventDefault();
     const detailPokes = JSON.parse((_a = localStorage.getItem("detailPokes")) !== null && _a !== void 0 ? _a : "{}");
     const newPokeName = document.getElementById("pokemon-name").value;
-    const pokeId = document.getElementById("pokemon-id")
-        .value.split("n00")[1];
+    const pokeId = document.getElementById("pokemon-id").value.split("n00")[1];
     const modalClassList = document.getElementById("bg-modal");
     if (!newPokeName || !pokeId || !modalClassList) {
         return;

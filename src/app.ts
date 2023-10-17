@@ -107,6 +107,20 @@ const countTypes = (
   });
 };
 
+const handleMoveOption = (typeName: string) => () => {
+  const dropdownSelectedOption = document.getElementById(
+    `dropdown-option-${typeName}`
+  );
+  const option = document.getElementById(
+    `option-${typeName}`
+  ) as HTMLOptionElement;
+
+  if (!dropdownSelectedOption || !option) return;
+
+  dropdownSelectedOption.parentNode?.removeChild(dropdownSelectedOption);
+  option.selected = false;
+};
+
 const renderPokeTypesInModal = (types: Array<Types>) => {
   const options = document.getElementById("dropdown-options");
 
@@ -128,16 +142,28 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
     const type = item.type.name.toUpperCase();
 
     elementTemplates.innerHTML = `
-      <div class="dropdown__choosed-option" style="background-color: ${
-        colorTypes[type as keyof typeof colorTypes]
-      };">
+      <div id="dropdown-option-${
+        item.type.name
+      }" class="dropdown__choosed-option" style="background-color: ${
+      colorTypes[type as keyof typeof colorTypes]
+    };">
         <span>${item.type.name}</span>
-        <button type="button" id="btn-remove-bug" style="border: none; outline: none; background-color: transparent;">
+        <button type="button" id="btn-remove-${
+          item.type.name
+        }" style="border: none; outline: none; background-color: transparent;">
           <i class="fas fa-times" style="font-size: small;"></i>
         </button>
       </div>
       `;
     options.appendChild(elementTemplates.content);
+
+    const btnRemoveType = document.getElementById(
+      `btn-remove-${item.type.name}`
+    );
+
+    if (btnRemoveType) {
+      btnRemoveType.onclick = handleMoveOption(item.type.name);
+    }
 
     const option = document?.getElementById(
       `option-${item.type.name}`
@@ -190,8 +216,9 @@ formModal?.addEventListener("submit", (e) => {
   const newPokeName = (
     document.getElementById("pokemon-name") as HTMLInputElement
   ).value;
-  const pokeId = (document.getElementById("pokemon-id") as HTMLInputElement)
-    .value.split("n00")[1];
+  const pokeId = (
+    document.getElementById("pokemon-id") as HTMLInputElement
+  ).value.split("n00")[1];
 
   const modalClassList = document.getElementById("bg-modal");
 
@@ -199,9 +226,7 @@ formModal?.addEventListener("submit", (e) => {
     return;
   }
 
-  const updatedPoke = document.getElementById(
-    `pokemon-name${pokeId}`
-  );
+  const updatedPoke = document.getElementById(`pokemon-name${pokeId}`);
 
   if (!updatedPoke) return;
 
