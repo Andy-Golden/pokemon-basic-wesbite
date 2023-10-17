@@ -238,14 +238,14 @@ function handleFilter() {
         });
         return result.every(Boolean);
     });
-    filterListArr.forEach((checkedFilter) => {
-        const numberOfPokes = document.getElementById(checkedFilter.name);
-        if (numberOfPokes) {
-            numberOfPokes.innerHTML = "(0)";
-        }
-    });
+    // filterListArr.forEach((checkedFilter) => {
+    //   const numberOfPokes = document.getElementById(checkedFilter.name);
+    //   if (numberOfPokes) {
+    //     numberOfPokes.innerHTML = "(0)";
+    //   }
+    // });
     if (!(filteredPoke === null || filteredPoke === void 0 ? void 0 : filteredPoke.length)) {
-        listPokemon.innerHTML = "Not found";
+        listPokemon.innerHTML = `<p class"not-found-message">Not found</p`;
     }
     else {
         listPokemon.innerHTML = "";
@@ -260,7 +260,7 @@ function handleFilter() {
             }
             renderPokemonTypes(detailPoke);
         });
-        countTypes(filteredPoke, appliedFilterNames);
+        // countTypes(filteredPoke, appliedFilterNames);
     }
 }
 const btnFilter = document.getElementById("btn-filter");

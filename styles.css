@@ -349,3 +349,7 @@ body {
 .modal__footer button:hover {
   background-color: grey;
 }
+
+.not-found-message {
+  text-align: center;
+}
