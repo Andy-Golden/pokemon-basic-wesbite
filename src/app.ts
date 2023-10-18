@@ -59,16 +59,25 @@ const renderPokemonTypes = (pokeDetail: PokeDetail) => {
 
   pokeEmlements.innerHTML = "";
 
-  for (let i = 0; i < pokeDetail.types.length; i++) {
+  const len = pokeDetail.types.length > 2 ? 2 : pokeDetail.types.length;
+
+  for (let i = 0; i < len; i++) {
     const elelementsTemplate = document.createElement("template");
-    const type = pokeDetail.types[i].type.name.toUpperCase();
+    const type = pokeDetail.types[i].type.name;
 
     const elelementHtmlString = `<p class="card-pokemon__element" style="background-color: ${
-      COLOR_TYPES[type as keyof typeof COLOR_TYPES]
-    };">${pokeDetail.types[i].type.name}</p>`;
+      COLOR_TYPES[type.toUpperCase() as keyof typeof COLOR_TYPES]
+    };">${type.replace(type[0], type[0].toUpperCase())}</p>`;
 
     elelementsTemplate.innerHTML = elelementHtmlString;
 
+    pokeEmlements.appendChild(elelementsTemplate.content);
+  }
+
+  if (pokeDetail.types.length > 2) {
+    const elelementsTemplate = document.createElement("template");
+    const htmlString = `<p style="text-align: center; font-size: large;">...More</p>`;
+    elelementsTemplate.innerHTML = htmlString;
     pokeEmlements.appendChild(elelementsTemplate.content);
   }
 };
@@ -105,18 +114,14 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
 
   types.forEach((item: Types) => {
     const elementTemplates = document.createElement("template");
-    const type = item.type.name.toUpperCase();
+    const type = item.type.name;
 
     elementTemplates.innerHTML = `
-      <div id="dropdown-option-${
-        item.type.name
-      }" class="dropdown__choosed-option" style="background-color: ${
-      COLOR_TYPES[type as keyof typeof COLOR_TYPES]
+      <div id="dropdown-option-${type}" class="dropdown__choosed-option" style="background-color: ${
+      COLOR_TYPES[type.toUpperCase() as keyof typeof COLOR_TYPES]
     };">
-        <span>${item.type.name}</span>
-        <button type="button" id="btn-remove-${
-          item.type.name
-        }" style="border: none; outline: none; background-color: transparent;">
+        <span>${type.replace(type[0], type[0].toUpperCase())}</span>
+        <button type="button" id="btn-remove-${type}" style="border: none; outline: none; background-color: transparent;">
           <i class="fas fa-times" style="font-size: small;"></i>
         </button>
       </div>
@@ -192,7 +197,10 @@ const renderOptions = () => {
 
   Object.values(POKE_TYPES).map((type, index) => {
     const elelementsTemplate = document.createElement("template");
-    const htmlString = `<option id="option-${type}" value="${index}">${type}</option>`;
+    const htmlString = `<option id="option-${type}" value="${index}">${type.replace(
+      type[0],
+      type[0].toUpperCase()
+    )}</option>`;
     elelementsTemplate.innerHTML = htmlString;
 
     options.appendChild(elelementsTemplate.content);
@@ -221,7 +229,7 @@ const handleOpenModal = (id: number) => () => {
   if (!input) return;
 
   input[0].value = `n00${id}`;
-  input[1].value = poke.name;
+  input[1].value = poke.name.replace(poke.name[0], poke.name[0].toUpperCase());
 
   const types = poke.types;
 

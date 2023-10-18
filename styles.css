@@ -100,6 +100,7 @@ body {
   display: flex;
   justify-content: center;
   height: 68%;
+  padding: 0px 5px;
 }
 
 .table-pokemon {
@@ -117,17 +118,19 @@ body {
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
+  overflow-x: hidden;
 }
 
 .card-pokemon {
   max-width: 230px;
   width: 100%;
-  height: fit-content;
+  height: 350px;
   border-radius: 10px;
   font-family: sans-serif;
   padding: 16px;
   margin-left: 30px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
@@ -159,7 +162,7 @@ body {
 .card-pokemon__name {
   font-size: x-large;
   overflow-wrap: break-word;
-  max-width: 150px;
+  max-width: 135px;
   width: 100%;
   /* overflow: hidden; */
   /* text-overflow: ellipsis; */
@@ -296,8 +299,8 @@ body {
   display: flex;
   flex: 1;
   gap: 10px;
+  /* overflow-y: hidden; */
   overflow-x: scroll;
-  overflow-y: hidden;
   padding: 10px, 0px;
 }
 
@@ -376,9 +379,16 @@ body {
   .card-pokemon {
     margin-left: 0px;
   }
+  .action {
+    width: 90%;
+    padding: 0px 5px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }
 
-  .searchbar__input {
-    font-size: 13.5px;
+  .searchbar {
+    width: 100%;
   }
 
   .modal {
