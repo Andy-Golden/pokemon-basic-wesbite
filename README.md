@@ -12,3 +12,5 @@
 - [x] Change all function to arrow functiona and seperate interface
 
 - Not done
+
+- [ ] Seperat constant to new file
