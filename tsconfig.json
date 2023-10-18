@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
     "outDir": "public/js",
     "rootDir": "src",
     "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "esModuleInterop": true
+    // "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "script.js"]
+  "include": ["src"]
 }

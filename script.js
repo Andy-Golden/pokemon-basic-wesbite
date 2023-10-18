@@ -7,6 +7,7 @@ const colorTypes = {
   water: "rgb(108, 177, 220)",
   fire: "rgb(186, 63, 63)",
   electric: "rgb(193, 193, 107)",
+  
 };
 
 const pokeTypes = {
