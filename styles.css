@@ -99,11 +99,11 @@ body {
 .wrapper {
   display: flex;
   justify-content: center;
-  height: 70%;
+  height: 68%;
 }
 
 .table-pokemon {
-  max-width: 1190px;
+  max-width: 1196px;
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -113,23 +113,22 @@ body {
   margin-top: 20px;
   margin-left: 30px;
   margin-right: auto;
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
 }
 
 .card-pokemon {
-  max-width: 220px;
+  max-width: 230px;
   width: 100%;
   height: fit-content;
   border-radius: 10px;
   font-family: sans-serif;
   padding: 16px;
-  margin-left: 35px;
+  margin-left: 30px;
   margin-top: 20px;
-  border: 0.5px solid rgb(108, 105, 105);
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .card-pokemon__image {
@@ -141,8 +140,8 @@ body {
 
 .card-pokemon__content {
   display: flex;
-  /* align-items: center; */
-  gap: 10px;
+  width: 100%;
+  gap: 5px;
   height: calc(100% - 225px);
 }
 
@@ -160,7 +159,7 @@ body {
 .card-pokemon__name {
   font-size: x-large;
   overflow-wrap: break-word;
-  max-width: 130px;
+  max-width: 150px;
   width: 100%;
   /* overflow: hidden; */
   /* text-overflow: ellipsis; */
@@ -361,13 +360,13 @@ body {
   text-align: center;
 }
 
-.style-2::-webkit-scrollbar {
+.style-scrollbar::-webkit-scrollbar {
   width: 12px;
   height: 5px;
   background-color: #dbd1d1;
 }
 
-.style-2::-webkit-scrollbar-thumb {
+.style-scrollbar::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #a6a5a5;

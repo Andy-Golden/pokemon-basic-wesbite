@@ -1,14 +1,14 @@
 // import { COLOR_TYPES, POKE_TYPES } from "./constants";
 
 const COLOR_TYPES: ColorTypes = {
-  GRASS: "rgb(99, 194, 99)",
-  POISON: "rgb(150, 29, 150)",
-  BUG: "rgb(31, 147, 31)",
-  NORMAL: "rgb(147, 146, 146);",
-  FLYING: "rgb(73, 73, 207)",
-  WATER: "rgb(108, 177, 220)",
-  FIRE: "rgb(186, 63, 63)",
-  ELECTRIC: "rgb(193, 193, 107)",
+  GRASS: "#63C263",
+  POISON: "#961D96",
+  BUG: "#1F931F",
+  NORMAL: "#939292",
+  FLYING: "#4949CF",
+  WATER: "#6CB1DC",
+  FIRE: "#BA3F3F",
+  ELECTRIC: "#C1C16B",
 };
 
 const POKE_TYPES: PokeTypes = {
@@ -25,6 +25,7 @@ const POKE_TYPES: PokeTypes = {
 let IS_DROPPED = false;
 
 const renderPokeCard = (pokeDetail: PokeDetail) => {
+  const pokeName = pokeDetail.name;
   const htmlString = `<div draggable="true" class="card-pokemon">
     <img
       class="card-pokemon__image"
@@ -37,7 +38,12 @@ const renderPokeCard = (pokeDetail: PokeDetail) => {
     <div class="card-pokemon__content">
       <div class="card-pokemon__info">
         <p class="card-pokemon__id">n 00${pokeDetail.id}</p>
-        <p id="pokemon-name${pokeDetail.id}" class="card-pokemon__name">${pokeDetail.name}</p>
+        <p id="pokemon-name${
+          pokeDetail.id
+        }" class="card-pokemon__name">${pokeName.replace(
+    pokeName[0],
+    pokeName[0].toUpperCase()
+  )}</p>
       </div>
       <div id="elelements${pokeDetail.id}" class="card-pokemon__elements">
       </div>
@@ -131,6 +137,65 @@ const renderPokeTypesInModal = (types: Array<Types>) => {
     if (option) {
       option.selected = true;
     }
+  });
+};
+
+const renderFilterTypes = () => {
+  const filterList = document.getElementById("filter-list");
+
+  if (!filterList) return;
+
+  Object.values(POKE_TYPES).forEach((type) => {
+    const elementTemplates = document.createElement("template");
+
+    const htmlString = `
+    <div class="filter-option">
+      <input class="filter-option__input" type="checkbox" name="${type}" /> 
+      <span>${type.replace(type[0], type[0].toUpperCase())}</span>
+      <span id="${type}" style="color: red;"></span>
+    </div>`;
+
+    elementTemplates.innerHTML = htmlString;
+
+    filterList.appendChild(elementTemplates.content);
+  });
+  const elementTemplates = document.createElement("template");
+  elementTemplates.innerHTML = `<button type="button" id="btn-filter">filter</button>`;
+  filterList.appendChild(elementTemplates.content);
+};
+
+const renderNumberOfTypes = (detailPokes: any) => {
+  const filterList = document
+    .getElementById("filter-list")
+    ?.getElementsByTagName("input");
+
+  if (!filterList) return;
+
+  const filterListArr = Array.prototype.slice.call(filterList);
+
+  filterListArr.forEach((checkedFilter) => {
+    const filteredPoke = detailPokes.filter((poke: PokeDetail) =>
+      poke.types.some((item) => item.type.name === checkedFilter.name)
+    );
+
+    const numberOfPokes = document.getElementById(checkedFilter.name);
+
+    if (numberOfPokes) {
+      numberOfPokes.innerHTML = `(${filteredPoke.length})`;
+    }
+  });
+};
+
+const renderOptions = () => {
+  const options = document.getElementById("multiselect");
+  if (!options) return;
+
+  Object.values(POKE_TYPES).map((type, index) => {
+    const elelementsTemplate = document.createElement("template");
+    const htmlString = `<option id="option-${type}" value="${index}">${type}</option>`;
+    elelementsTemplate.innerHTML = htmlString;
+
+    options.appendChild(elelementsTemplate.content);
   });
 };
 
@@ -255,25 +320,9 @@ window.onload = async () => {
 
   localStorage.setItem("detailPokes", JSON.stringify(detailPokes));
 
-  const filterList = document
-    .getElementById("filter-list")
-    ?.getElementsByTagName("input");
-
-  if (!filterList) return;
-
-  const filterListArr = Array.prototype.slice.call(filterList);
-
-  filterListArr.forEach((checkedFilter) => {
-    const filteredPoke = detailPokes.filter((poke: PokeDetail) =>
-      poke.types.some((item) => item.type.name === checkedFilter.name)
-    );
-
-    const numberOfPokes = document.getElementById(checkedFilter.name);
-
-    if (numberOfPokes) {
-      numberOfPokes.innerHTML = `(${filteredPoke.length})`;
-    }
-  });
+  renderFilterTypes();
+  renderNumberOfTypes(detailPokes);
+  renderOptions();
 };
 
 const handleSearch = async (e: Event) => {
