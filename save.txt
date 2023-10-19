@@ -1,1 +1,0 @@
-<div class="dropdown__choosed-option" style="background-color: lightgray;"><span>flying</span><button type="button" id="btn-remove-bug" style="border: none; outline: none; background-color: transparent;"><i class="fas fa-times" style="font-size: small;"></i></button></div>

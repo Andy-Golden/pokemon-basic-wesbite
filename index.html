@@ -12,10 +12,15 @@
   </head>
   <body>
     <div class="navbar">
-      <img class="navbar__image" src="./pokeball.png" alt="pokebal" />
+      <button id="btn-show-side-bar" class="btn-show-side-bar"><img class="navbar__image" src="./pokeball.png" alt="pokebal" /></button>
       <img class="navbar__image" src="./user.png" alt="user" />
     </div>
-    <h1 class="title">Pokedex</h1>
+    <div id="side-bar" class="side-bar">
+      <button id="btn-close-side-bar" class="btn-close-side-bar"> 
+        <i class="fas fa-times" style="color: #263b5f; font-size: large;"></i>       
+      </button>
+    </div>
+    <h1 class="title">Pokedex</h1> 
     <p class="subtitle">
       Search for a Pokemon by name or using its national Pokedex number
     </p>
@@ -33,53 +38,12 @@
           />
         </div>
         <button class="btn-refresh">
-          <img src="refresh.png" alt="refresh" />
+          <i class="fas fa-sync-alt"></i>
         </button>
       </div>
     </form>
     <div class="wrapper">
       <div id="filter-list" class="filter-list">
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="bug" /> 
-          <span>bug</span>
-          <span id="bug" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="electric" />
-          <span>electric</span>
-          <span id="electric" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="flying" />
-          <span>flying</span>
-          <span id="flying" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="normal" />
-          <span>normal</span>
-          <span id="normal" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="grass" />
-          <span>grass</span>
-          <span id="grass" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="poison" />
-          <span>poison</span>
-          <span id="poison" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="water" />
-          <span>water</span>
-          <span id="water" style="color: red;"></span>
-        </div>
-        <div class="filter-option">
-          <input class="filter-option__input" type="checkbox" name="fire" />
-          <span>fire</span>
-          <span id="fire" style="color: red;"></span>
-        </div>
-        <button type="button" id="btn-filter">filter</button>
       </div>
       <div id="list-pokemon" class="table-pokemon"></div>
     </div>
@@ -93,19 +57,10 @@
               <input id="pokemon-id" readonly="true" />
               <input id="pokemon-name" name="pokemon-name" type="text" placeholder="Enter new pokemon name" />
               <div id="dropdown" class="dropdown">
-                <div id="dropdown-options" class="dropdown__choosed-options">
-                  
+                <div id="dropdown-options" class="dropdown__choosed-options style-scrollbar">
                 </div>
                 <button type="button" id="btn-show-dropdown"><i class="fas fa-caret-down" style="font-size: large; "></i></button>
-                <select id="multiselect" multiple="multiple" class="multiselect">
-                  <option id="option-bug" value="1">bug</option>
-                  <option id="option-electric" value="2">electric</option>
-                  <option id="option-flying" value="3">flying</option>
-                  <option id="option-normal" value="4">normal</option>    
-                  <option id="option-grass" value="5">grass</option>
-                  <option id="option-poison" value="6">poison</option>
-                  <option id="option-water" value="7">water</option>
-                  <option id="option-fire" value="8">fire</option>     
+                <select id="multiselect" multiple="multiple" class="multiselect">    
                 </select>
               </div>
             </div>
@@ -121,6 +76,8 @@
         </div>
     </form>
     </divv>
-    <script src="script.js"></script>
+    <script type="module" src="public/js/app.js"></script>
+    <!-- <script type="module" src="public/js/constants.js"></script> -->
+
   </body>
 </html>
