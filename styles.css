@@ -131,7 +131,8 @@ body {
   margin-left: 30px;
   margin-top: 10px;
   margin-bottom: 10px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .card-pokemon__image {
@@ -375,6 +376,25 @@ body {
   background-color: #a6a5a5;
 }
 
+.btn-show-side-bar {
+  background: transparent;
+  border: none;
+  outline: none;
+  pointer-events: none;
+}
+
+.side-bar {
+  display: none;
+}
+
+/* tablet */
+@media only screen and (max-width: 1024px) {
+  .table-pokemon {
+    justify-content: center;
+  }
+}
+
+/* mobile */
 @media only screen and (max-width: 600px) {
   .card-pokemon {
     margin-left: 0px;
@@ -428,5 +448,62 @@ body {
 
   .modal__body #pokemon-info #pokemon-name {
     border-bottom: 1px solid grey;
+  }
+
+  .filter-list {
+    display: none;
+  }
+
+  .table-pokemon {
+    margin-left: 0px;
+    justify-content: center;
+    position: relative;
+  }
+
+  .btn-show-side-bar {
+    pointer-events: auto;
+  }
+
+  .side-bar {
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 80%;
+    border: 1px solid;
+    z-index: 1000;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    visibility: hidden;
+  }
+
+  .side-bar--show {
+    visibility: visible;
+  }
+
+  .side-bar-option {
+    display: flex;
+    align-items: center;
+    height: 10%;
+    margin-top: 5px;
+  }
+
+  .side-bar-option__input {
+    max-width: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .side-bar__btn-filter {
+    max-width: 100px;
+    width: 100%;
+  }
+
+  .btn-close-side-bar {
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
   }
 }

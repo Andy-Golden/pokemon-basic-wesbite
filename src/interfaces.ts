@@ -1,24 +1,31 @@
-interface ColorTypes {
-  GRASS: string;
-  POISON: string;
-  BUG: string;
-  NORMAL: string;
-  FLYING: string;
-  WATER: string;
-  FIRE: string;
-  ELECTRIC: string;
+type PokeType =
+  | "GRASS"
+  | "POISON"
+  | "BUG"
+  | "NORMAL"
+  | "FLYING"
+  | "WATER"
+  | "FIRE"
+  | "ELECTRIC";
+
+type ColorTypes = {
+  [key in PokeType]: string;
 }
 
-interface PokeTypes {
-  GRASS: string;
-  POISON: string;
-  BUG: string;
-  NORMAL: string;
-  FLYING: string;
-  WATER: string;
-  FIRE: string;
-  ELECTRIC: string;
-}
+type PokeTypes = {
+  [key in PokeType]: string;
+};
+
+// enum PokeType {
+//   GRASS,
+//   POISON,
+//   BUG,
+//   NORMAL,
+//   FLYING,
+//   WATER,
+//   FIRE,
+//   ELECTRIC,
+// }
 
 interface Sprites {
   front_default: string;
